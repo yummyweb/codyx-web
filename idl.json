@@ -1,0 +1,320 @@
+{
+  "version": "0.1.0",
+  "name": "buidlsmart_solana",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "baseApplication",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "newApplication",
+      "accounts": [
+        {
+          "name": "baseApplication",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "applicationName",
+          "type": "string"
+        },
+        {
+          "name": "currentTimestamp",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "deleteApplication",
+      "accounts": [
+        {
+          "name": "baseApplication",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "addObjectToApplication",
+      "accounts": [
+        {
+          "name": "baseApplication",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "appId",
+          "type": "u32"
+        },
+        {
+          "name": "objectName",
+          "type": "string"
+        },
+        {
+          "name": "fieldNames",
+          "type": {
+            "vec": "string"
+          }
+        },
+        {
+          "name": "fieldTypes",
+          "type": {
+            "vec": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "addFunctionToApplication",
+      "accounts": [
+        {
+          "name": "baseApplication",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "appId",
+          "type": "u32"
+        },
+        {
+          "name": "functionName",
+          "type": "string"
+        },
+        {
+          "name": "functionAction",
+          "type": "string"
+        },
+        {
+          "name": "targetId",
+          "type": "u32"
+        },
+        {
+          "name": "paramName",
+          "type": {
+            "vec": "string"
+          }
+        },
+        {
+          "name": "paramType",
+          "type": {
+            "vec": "string"
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Application",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "applicationList",
+            "type": {
+              "vec": {
+                "defined": "Single"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Single",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "objects",
+            "type": {
+              "vec": {
+                "defined": "Object"
+              }
+            }
+          },
+          {
+            "name": "functions",
+            "type": {
+              "vec": {
+                "defined": "Function"
+              }
+            }
+          },
+          {
+            "name": "creator",
+            "type": "publicKey"
+          },
+          {
+            "name": "timestamp",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Object",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "fields",
+            "type": {
+              "vec": {
+                "defined": "Field"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Field",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "fieldType",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Function",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "action",
+            "type": "string"
+          },
+          {
+            "name": "creator",
+            "type": "publicKey"
+          },
+          {
+            "name": "parameters",
+            "type": {
+              "vec": {
+                "defined": "Parameter"
+              }
+            }
+          },
+          {
+            "name": "target",
+            "type": {
+              "defined": "Object"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Parameter",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "paramType",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "address": "56rhhZsNu5WZ7uxqxG8LFp5gp9mgJnb2CrYaVuJa81WV"
+  }
+}
