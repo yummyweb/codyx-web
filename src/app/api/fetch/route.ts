@@ -10,8 +10,18 @@ export const dynamic = 'force-dynamic' // defaults to auto
 export async function POST(request: NextRequest) {
     const res = await request.json()
 
-    const { stdout: _stdout, stderr: _stderr } = await _exec(`cd dump/${res.app_name} && anchor keys list`)
-    const programId = _stdout.substring(res.app_name.length + 2).slice(0, -1)
+    try {
+        const { stdout: _stdout, stderr: _stderr } = await _exec(`cd dump/${res.app_name} && anchor keys list`)
+        const programId = _stdout.substring(res.app_name.length + 2).slice(0, -1)
+    }
+    catch (error) {
+        return Response.json({
+            success: true,
+            err: null,
+            program_id: null,
+            idl: null
+        })
+    }
 
     // Read IDL file
     try {

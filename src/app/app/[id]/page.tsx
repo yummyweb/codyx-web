@@ -73,6 +73,10 @@ export default function Page({ params }: { params: { id: string } }) {
     useEffect(() => {
         if (params.id) {
             (async () => await getApplication())()
+            toast({
+                description: `App deployed successfully.`,
+                action: <ToastAction onClick={() => window ? window.open("https://explorer.solana.com/address/DDt7M6vz1sLdUdU3QCGdr1Fn69YaS9jZCXvWkcTVHm9?cluster=devnet", '_blank')?.focus() : null} altText="Open">Open</ToastAction> 
+            })
         }
     }, [params])
 
