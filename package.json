@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "compile:contracts": "npx hardhat compile"
+    "compile:contracts": "cd contracts && npx hardhat compile && cd ../"
   },
   "dependencies": {
     "@headlessui/react": "^2.0.4",
