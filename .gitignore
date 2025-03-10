@@ -44,3 +44,6 @@ next-env.d.ts
 
 # virtualenv
 */venv/
+
+# contracts
+./contracts/icp/.kybra
