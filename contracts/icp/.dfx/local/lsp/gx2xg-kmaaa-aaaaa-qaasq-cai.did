@@ -1,0 +1,37 @@
+type Action = record {
+  id : int8;
+  action_name : text;
+  action_type : text;
+  action_obj : Object;
+};
+type App = record {
+  id : int8;
+  app_creator : User;
+  app_name : text;
+  app_state : vec int8;
+  app_actions : vec int8;
+  app_objects : vec int8;
+};
+type Field = record { id : int8; field_name : text; field_type : text };
+type Object = record { id : int8; obj_name : text; obj_fields : vec int8 };
+type State = record {
+  id : int8;
+  state_app : App;
+  state_name : text;
+  state_type : Object;
+};
+type User = record { id : int8; user_apps : vec int8; user_username : text };
+service : () -> {
+  create_action : (text, text, int, int) -> ();
+  create_app : (int, text) -> ();
+  create_field : (text, text, int) -> ();
+  create_object : (text, int) -> (opt int);
+  create_state : (text, int, int) -> ();
+  get_actions_from_app_id : (int) -> (opt vec Action) query;
+  get_app : (int) -> (opt App) query;
+  get_fields_from_obj_id : (int) -> (opt vec Field) query;
+  get_objects_from_app_id : (int) -> (opt vec Object) query;
+  get_states_from_app_id : (int) -> (opt vec State) query;
+  get_user : (int) -> (opt User) query;
+  new_user : () -> (int);
+}

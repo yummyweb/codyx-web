@@ -1,0 +1,14 @@
+{
+    "canisters": {
+        "codyx_icp": {
+            "type": "custom",
+            "build": "python -m kybra codyx_icp src/main.py ",
+            "candid": "src/main.did",
+            "wasm": ".kybra/codyx_icp/codyx_icp.wasm",
+            "declarations": {
+                "output": "test/dfx_generated/codyx_icp"
+            },
+            "optimize": "size"
+        }
+    }
+}

@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
+import AppWalletProvider from "./AppWalletProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -31,7 +32,9 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          {children}
+          <AppWalletProvider>
+            {children}
+          </AppWalletProvider>
           <Toaster />
         </ThemeProvider>
       </body>
