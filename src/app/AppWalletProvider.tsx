@@ -41,7 +41,7 @@ export default function AppWalletProvider({
         const output = await adapter.signIn(input);
 
         // Verify the sign-in output against the generated input server-side
-        let strPayload = JSON.stringify({ input, output });
+        let strPayload = JSON.stringify({ input, output, publicKey: output.account.publicKey });
         const verifyResponse = await fetch("/api/auth/verifySIWS", {
             method: "POST",
             body: strPayload,

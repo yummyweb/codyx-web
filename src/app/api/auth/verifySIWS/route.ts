@@ -22,9 +22,10 @@ export async function POST(request: NextRequest) {
     //     payload: message.payload
     // })
 
+    console.log(res.publicKey)
     const serialisedOutput: SolanaSignInOutput = {
         account: {
-            publicKey: new Uint8Array(bs58.decode(res.output.address)),
+            publicKey: new Uint8Array(res.output.account["#e"]),
             ...res.output.account
         },
         signature: new Uint8Array(res.output.signature.data),

@@ -108,11 +108,6 @@ export default function Navbar() {
         // } catch (error) {
         //     console.error(error);
 
-        const resp = await wallet.connect()
-        console.log(resp)
-
-        console.log(wallet.connected)
-
         // Fetch the signInInput from the backend
         const signInData = await fetch("/api/auth/createSignInData")
         const input: SolanaSignInInput = (await signInData.json()).signInData
