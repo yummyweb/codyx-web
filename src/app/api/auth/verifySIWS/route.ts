@@ -43,8 +43,6 @@ export async function POST(request: NextRequest) {
         })
     }
 
-    console.log(existingUser)
-
     return Response.json({
         success: verifySignIn(res.input, serialisedOutput)
     })
