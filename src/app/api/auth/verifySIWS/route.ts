@@ -7,30 +7,43 @@ import type {
 } from "@solana/wallet-standard-features";
 import { verifySignIn } from "@solana/wallet-standard-util";
 
+import { PrismaClient } from '../../../../../prisma/app/generated/prisma/client'
+
+const prisma = new PrismaClient()
+
 export const dynamic = 'force-dynamic' // defaults to auto
 export async function POST(request: NextRequest) {
     const res = await request.json()
 
-    // console.log(res.signedMessage)
-
-    // const message = getSIWS(res.publicKey)
-    // const success = message.verify({
-    //     signature: {
-    //         t: "sip99",
-    //         s: res.signedMessage
-    //     },
-    //     payload: message.payload
-    // })
-
-    console.log(res.publicKey)
     const serialisedOutput: SolanaSignInOutput = {
         account: {
-            publicKey: new Uint8Array(res.output.account["#e"]),
+            publicKey: new Uint8Array(Object.keys(res.publicKey).map(function (key) { return res.publicKey[key]; })),
             ...res.output.account
         },
         signature: new Uint8Array(res.output.signature.data),
         signedMessage: new Uint8Array(res.output.signedMessage.data),
     };
+
+    const decodedPK = bs58.encode(Object.keys(res.publicKey).map(function (key) { return res.publicKey[key]; }))
+
+    // Check if user exists, else save in database
+    const existingUser = await prisma.user.findUnique({
+        where: {
+            address: decodedPK,
+        },
+    })
+
+    if (!existingUser) {
+        const newUser = await prisma.user.create({
+            data: {
+                address: decodedPK,
+                signature: bs58.encode(new Uint8Array(res.output.signature.data)),
+                chainId: "devnet"
+            },
+        })
+    }
+
+    console.log(existingUser)
 
     return Response.json({
         success: verifySignIn(res.input, serialisedOutput)

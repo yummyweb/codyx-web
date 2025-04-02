@@ -4,6 +4,7 @@ import { type NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic' // defaults to auto
 export async function GET(request: NextRequest) {
+    // Generate the output to be signed by the user
     const signInData: SolanaSignInInput = {
         domain: "localhost:3000",
         statement: "Sign in with Solana to the app.",

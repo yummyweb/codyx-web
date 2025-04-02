@@ -115,6 +115,8 @@ export default function Navbar() {
         // Send the signInInput to the wallet and trigger a sign-in request
         const output = await window.solana.signIn(input);
 
+        console.log(output)
+
         // Verify the sign-in output against the generated input server-side
         let strPayload = JSON.stringify({ input, output });
         const verifyResponse = await fetch("/api/auth/verifySIWS", {
