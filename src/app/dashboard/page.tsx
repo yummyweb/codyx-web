@@ -112,13 +112,16 @@ export default function Dashboard() {
     // Getting a list of applications
     const getApplications = async () => {
         try {
-            const provider = getProvider();
-            const program = new Program((idl as Idl), programID, provider);
-            const account = await program.account.application.fetch(baseAccount.publicKey);
+            const sessionId = document.cookie.split(`; session-id=`)[1]
 
-            console.log("Got the account", account)
-            console.log(account)
-            setUserApplications(account.applicationList)
+            const res = await fetch("/api/applications", {
+                method: "POST",
+                body: JSON.stringify({ sessionId })
+            })
+
+            const resp = await res.json()
+
+            setUserApplications(resp.applications)
         } catch (error) {
             console.log("Error: ", error)
             createAccount()

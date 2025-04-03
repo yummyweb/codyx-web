@@ -6,6 +6,7 @@ import type {
     SolanaSignInOutput,
 } from "@solana/wallet-standard-features";
 import { verifySignIn } from "@solana/wallet-standard-util";
+import { cookies } from 'next/headers'
 
 import { PrismaClient } from '../../../../../prisma/app/generated/prisma/client'
 
@@ -14,6 +15,7 @@ const prisma = new PrismaClient()
 export const dynamic = 'force-dynamic' // defaults to auto
 export async function POST(request: NextRequest) {
     const res = await request.json()
+    const cookieStore = await cookies()
 
     const serialisedOutput: SolanaSignInOutput = {
         account: {
@@ -33,6 +35,17 @@ export async function POST(request: NextRequest) {
         },
     })
 
+    if (existingUser) {
+        const updateUser = await prisma.user.update({
+            where: {
+                address: decodedPK,
+            },
+            data: {
+                signature: bs58.encode(new Uint8Array(res.output.signature.data)),
+            },
+        })
+    }
+
     if (!existingUser) {
         const newUser = await prisma.user.create({
             data: {
@@ -42,6 +55,9 @@ export async function POST(request: NextRequest) {
             },
         })
     }
+
+    // Store a server-side cookie as `session-id` to persist user session and check for authorization
+    cookieStore.set("session-id", bs58.encode(new Uint8Array(res.output.signature.data)))
 
     return Response.json({
         success: verifySignIn(res.input, serialisedOutput)
