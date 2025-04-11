@@ -1,6 +1,6 @@
 "use client"
 import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon, BoltIcon } from '@heroicons/react/24/outline'
 import { useState, useEffect, useCallback } from 'react'
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
@@ -11,6 +11,13 @@ import { SolanaSignInInput } from '@solana/wallet-standard-features';
 import { Adapter } from '@solana/wallet-adapter-base';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PhantomWalletName } from '@solana/wallet-adapter-wallets';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { SiInternetcomputer, SiSolana, SiEthereum, SiHedera } from "react-icons/si"
 
 const navigation = [
     { name: 'Create', href: '/create' },
@@ -22,6 +29,7 @@ const navigation = [
 export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [walletAddress, setWalletAddress] = useState("")
+    const [selectedNetwork, setSelectedNetwork] = useState("Solana")
     const wallet = useWallet()
 
     const { toast } = useToast()
@@ -143,7 +151,8 @@ export default function Navbar() {
         <div className="px-6 pt-6 lg:px-8">
             <nav className='flex items-center justify-between pb-6 border-b'>
                 <div className='flex lg:flex-1'>
-                    <a href='/' className='-m-1.5 p-1.5'>
+                    <a href='/' className='-m-1.5 p-1.5 flex items-center gap-2'>
+                        <BoltIcon className='h-6 w-6 text-primary' />
                         <h1 className='text-xl font-semibold'>Codyx</h1>
                     </a>
                 </div>
@@ -168,14 +177,56 @@ export default function Navbar() {
                         </a>
                     ))}
                 </div>
-                <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
+                <div className='hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4'>
                     <Button onClick={() => wallet.connected ? router.push("/dashboard") : loginWithPhantom()}>{wallet.connected ? "Dashboard" : "Connect Wallet"} <span aria-hidden='true'>&rarr;</span></Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="bg-black text-white hover:bg-black/80">
+                                {selectedNetwork === "Internet Computer" && <SiInternetcomputer className="w-5 h-5 mr-2" />}
+                                {selectedNetwork === "Solana" && <SiSolana className="w-5 h-5 mr-2" />}
+                                {selectedNetwork === "Ethereum" && <SiEthereum className="w-5 h-5 mr-2" />}
+                                {selectedNetwork === "Hedera" && <SiHedera className="w-5 h-5 mr-2" />}
+                                {selectedNetwork}
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                                className="flex items-center gap-2"
+                                onClick={() => setSelectedNetwork("Internet Computer")}
+                            >
+                                <SiInternetcomputer className="w-5 h-5" />
+                                Internet Computer
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                                className="flex items-center gap-2"
+                                onClick={() => setSelectedNetwork("Solana")}
+                            >
+                                <SiSolana className="w-5 h-5" />
+                                Solana
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                                className="flex items-center gap-2"
+                                onClick={() => setSelectedNetwork("Ethereum")}
+                            >
+                                <SiEthereum className="w-5 h-5" />
+                                Ethereum
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                                className="flex items-center gap-2"
+                                onClick={() => setSelectedNetwork("Hedera")}
+                            >
+                                <SiHedera className="w-5 h-5" />
+                                Hedera
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </nav>
             <Dialog as='div' open={mobileMenuOpen} onClose={setMobileMenuOpen}>
                 <Dialog.Panel className='fixed inset-0 z-10 overflow-y-auto bg-background px-6 py-6 lg:hidden'>
                     <div className='flex items-center justify-between'>
-                        <a href='#' className='-m-1.5 p-1.5'>
+                        <a href='#' className='-m-1.5 p-1.5 flex items-center gap-2'>
+                            <BoltIcon className='h-6 w-6 text-primary' />
                             <h1 className='text-xl font-semibold'>Your Company</h1>
                         </a>
                         <button
