@@ -21,7 +21,7 @@ import { SiInternetcomputer, SiSolana, SiEthereum, SiHedera } from "react-icons/
 
 const navigation = [
     { name: 'Create', href: '/create' },
-    { name: 'Features', href: '#' },
+    { name: 'Features', href: '/features' },
     { name: 'Marketplace', href: '#' },
     { name: 'FAQ', href: '#' },
 ];
@@ -35,12 +35,6 @@ export default function Navbar() {
     const { toast } = useToast()
 
     const router = useRouter()
-
-    // useEffect(() => {
-    //     if (localStorage.getItem("u-authenticated") === "1") {
-    //         loginWithPhantom()
-    //     }
-    // }, [])
 
     useEffect(() => {
         wallet.select(PhantomWalletName)
